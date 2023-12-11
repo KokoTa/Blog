@@ -1,4 +1,11 @@
 #!/usr/bin/env sh
+###
+ # @Author: KokoTa
+ # @Date: 2023-10-09 17:54:55
+ # @LastEditTime: 2023-10-09 18:00:47
+ # @LastEditors: KokoTa
+ # @Description: 
+### 
 
 # 确保脚本抛出遇到的错误
 set -e
@@ -20,6 +27,6 @@ git commit -m 'deploy'
 # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:KokoTa/KokoTa_Home.git master:gh-pages
+git push -f git@github.com:KokoTa/blog.git main:gh-pages
 
 cd -

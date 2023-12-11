@@ -1,5 +1,12 @@
+/*
+ * @Author: KokoTa
+ * @Date: 2023-10-09 17:54:55
+ * @LastEditTime: 2023-10-09 17:56:53
+ * @LastEditors: KokoTa
+ * @Description: 
+ */
 module.exports = {
-  base: '/KokoTa_Home/',
+  base: '/blog/',
   title: "KokoTa's Blog",
   description: 'Just playing around',
   themeConfig: {
