@@ -1,11 +1,3 @@
-<!--
- * @Author: KokoTa
- * @Date: 2023-04-09 16:58:38
- * @LastEditTime: 2023-12-12 11:50:32
- * @LastEditors: KokoTa
- * @Description: 
- * @FilePath: \KokoTa_Site\docs\front\盒模型与BFC与布局.md
--->
 # 盒模型与BFC与布局
 
 他：盒模型是什么？

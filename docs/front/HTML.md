@@ -1,11 +1,3 @@
-<!--
- * @Author: KokoTa
- * @Date: 2023-12-12 10:39:48
- * @LastEditTime: 2023-12-12 10:45:19
- * @LastEditors: KokoTa
- * @Description: 
- * @FilePath: \KokoTa_Site\docs\front\HTML.md
--->
 # HTML
 
 ## 如何理解语义化
