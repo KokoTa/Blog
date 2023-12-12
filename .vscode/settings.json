@@ -18,5 +18,10 @@
     "titleBar.inactiveBackground": "#6cb1ce99",
     "titleBar.inactiveForeground": "#15202b99"
   },
-  "peacock.color": "#6cb1ce"
+  "peacock.color": "#6cb1ce",
+  "markdownlint.config": {
+    "MD033": {
+      "allowed_elements": ["nobr", "sup", "a", "iframe"]
+    }
+  }
 }

@@ -1,3 +1,11 @@
+<!--
+ * @Author: KokoTa
+ * @Date: 2023-04-09 19:33:49
+ * @LastEditTime: 2023-12-12 13:16:57
+ * @LastEditors: KokoTa
+ * @Description: 
+ * @FilePath: \KokoTa_Site\docs\question\css\other.md
+-->
 # 其他
 
 ## 浏览器渲染方式
@@ -7,10 +15,6 @@
 ## 消除空隙
 
 给父元素设置 font-size: 0 来消除 inline-block 元素之间的空隙。
-
-## 清除浮动
-
-[连接](https://www.jianshu.com/p/09bd5873bed4)
 
 ## CSS重排重绘及其性能优化
 

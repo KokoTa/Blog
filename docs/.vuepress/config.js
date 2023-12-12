@@ -1,7 +1,7 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2023-10-09 17:56:53
+ * @LastEditTime: 2023-12-12 10:57:22
  * @LastEditors: KokoTa
  * @Description: 
  */
@@ -13,9 +13,11 @@ module.exports = {
     lastUpdated: 'Last Updated',
     sidebar: [
       {
-        title: '旧文章迁移',
+        title: '前端知识点汇总',
         path: '/front/',
         children: [
+          '/front/HTML',
+          '/front/CSS',
           '/front/盒模型与BFC与布局',
           '/front/事件与类型',
           '/front/HTTP',
@@ -40,7 +42,7 @@ module.exports = {
         ]
       },
       {
-        title: '前端知识汇总',
+        title: '前端其他知识点汇总',
         path: '/question/',
         children: [
           {
