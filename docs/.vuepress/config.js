@@ -1,7 +1,7 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2023-12-12 22:27:59
+ * @LastEditTime: 2023-12-23 13:44:11
  * @LastEditors: KokoTa
  * @Description: 
  */
@@ -18,14 +18,15 @@ module.exports = {
         children: [
           '/front/HTML',
           '/front/CSS',
+          '/front/JavaScript',
           '/front/盒模型与BFC与布局',
           '/front/事件与类型',
-          '/front/HTTP',
           '/front/原型',
           '/front/类与继承',
+          '/front/HTTP',
+          '/front/HTTPS',
           '/front/通信与安全',
           '/front/渲染与运行与性能与监控',
-          '/front/HTTPS',
           '/front/Cookie与Session与Token',
           '/front/跨域',
           '/front/移动端适配',
@@ -38,7 +39,9 @@ module.exports = {
           '/front/MVVM',
           '/front/混合开发',
           '/front/直播',
-          '/front/内网穿透'
+          '/front/内网穿透',
+          '/front/工程化',
+          '/front/杂项',
         ]
       },
       {

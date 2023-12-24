@@ -61,6 +61,22 @@
 404 Not Found：请求资源不存在
 500 Internal Server Error：服务器发生位置错误，原来的缓存可继续使用
 503 Server Unavailable：请求未完成，服务器过载或宕机，一段时间后可能恢复正常
+504 Gateway Timeout：网关超时
+
+## 常见头信息
+
+1. Request Headers：
+   1. Accept：浏览器可接受的数据格式
+   2. Accept-Encoding：浏览器可接受的压缩算法，比如 gzip
+   3. Accept-Language：浏览器可接受的语言，比如 zh-CN
+   4. Connection：连接指令，比如 keep-alive 表示一次 TCP 连接重复使用
+   5. User-Agent：浏览器信息
+   6. Content-Type：请求体的格式，比如 application/json
+2. Response Headers：
+   1. Content-Type：响应体的格式，比如 application/json
+   2. Content-Encoding：响应体的压缩算法，比如 gzip
+   3. Content-Length：响应体的长度，多少字节
+   4. Set-Cookie：设置 cookie
 
 ## 持久连接
 
@@ -88,3 +104,21 @@ HTTP采用“请求-应答”模式，普通模式下每次“请求-应答”�
 ## Restful 设计
 
 [阮一峰：Restful 设计讲解](http://www.ruanyifeng.com/blog/2011/09/restful.html)
+
+1. 不使用 url 参数
+
+   ```js
+   // 传统方式
+   // /list?pageNo=1&pageSize=10
+   // Restful 方式
+   // /list/1/10
+   ```
+  
+2. 使用 method 表示操作类型
+
+    ```js
+    // 传统方式
+    // POST /user/update-user?id=100
+    // Restful 方式
+    // PUT /user/100
+    ```

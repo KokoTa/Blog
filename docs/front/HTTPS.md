@@ -40,18 +40,5 @@ HTTPS情况下，应用层发送数据时会附加一种叫做MAC(Message Authen
 
 ![HTPPS流程](/images/HTTPS流程.jpg)
 
-1. 客户端发送 Client Hello，表示要开始 SSL 通信。报文中包含 SSL 版本、支持的加密算法等。
-2. 服务端发送 Server Hello，表示可以进行 SSL 通信。报文中包含具体的 SSL 版本、选择的加密算法等。
-3. 服务器发送 Certificate，即发送公钥证书
-4. 服务器发送 Server Hello Done，通知客户端SSL第一次握手结束
-5. 客户端发送 Client Key Exchange，发送由客户端生成的 pre-master secret(一串随机数)，该随机数利用步骤 3 的公钥加密
-6. 客户端发送 Change Cipher Spec，表示后续的通讯会用这个随机数来进行加密
-7. 客户端发送 Finished，包含连接至今全部报文的整体校验值，如果服务器解密成功，则该次握手成功
-8. 行为和6同理
-9. 行为和7同理
-10. SSL建立完成，开始进行HTTP请求
-11. HTTP响应
-12. 客户端断开连接
-
 这里我们可能会有一个问题，把证书克隆一份，其他人是不是也能拥有沟通权限了？
 答案是否定的，原因见 [这里](https://www.zhihu.com/question/29251991/answer/580813797)
