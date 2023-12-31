@@ -1,7 +1,7 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2023-12-23 13:44:11
+ * @LastEditTime: 2023-12-30 20:33:16
  * @LastEditors: KokoTa
  * @Description: 
  */
@@ -42,6 +42,8 @@ module.exports = {
           '/front/内网穿透',
           '/front/工程化',
           '/front/杂项',
+          '/front/Vue2基础',
+          '/front/Vue2原理',
         ]
       },
       {

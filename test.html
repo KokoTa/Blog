@@ -1,35 +1,86 @@
 <!--
  * @Author: KokoTa
  * @Date: 2023-12-19 17:43:58
- * @LastEditTime: 2023-12-19 17:44:50
+ * @LastEditTime: 2023-12-31 11:39:02
  * @LastEditors: KokoTa
  * @Description: 
  * @FilePath: \KokoTa_Site\test.html
 -->
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
-  </head>
-  <body>
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-    <div id="a">asd</div>
-    <script>
-      const a = document.querySelector('#a')
-      a.addEventListener('click', function (e) {
-        console.log(e.target.matches('div'))
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script>
+    // 对象监听函数
+    function observer(data) {
+      // 判断是否是数组或对象(函数不考虑)
+      if (typeof data !== 'object' || data == null) {
+        return data
+      }
+      // 给属性设置监听
+      for (let key in data) {
+        defineReactive(data, key, data[key])
+      }
+    }
+
+    // 属性监听函数
+    function defineReactive(data, key, val) {
+      Object.defineProperty(data, key, {
+        enumerable: true,
+        configurable: true,
+        get() {
+          return val
+        },
+        set(newVal) {
+          if (newVal !== val) {
+            // 设置新值
+            // 注意 val 一直在闭包中，设置完之后，get 的就是新的值
+            val = newVal
+            // 更新视图
+            updateView()
+            // 深度监听(递归)
+            observer(val)
+          }
+        }
       })
-    </script>
-  </body>
+
+      // 深度监听(递归)
+      observer(val)
+    }
+
+    // 更新视图函数
+    function updateView() {
+      console.log('更新视图完成')
+    }
+
+    // 测试
+    const data = {
+      name: 'KokoTa',
+      age: 18,
+      info: {
+        city: 'Xiamen'
+      }
+    }
+
+    observer(data)
+
+    data.name = 'Brain'
+    data.age = 28
+    data.info.city = 'Quanzhou'
+    data.info.city = {
+      name: 'Licheng'
+    }
+    data.info.city.name = 'Fengze'
+    console.log(data)
+  </script>
+</body>
+
 </html>

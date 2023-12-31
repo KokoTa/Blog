@@ -1,4 +1,4 @@
-# Vue2
+# Vue2基础
 
 ## v-if 和 v-show 的区别
 
@@ -86,9 +86,16 @@
 2. data 改变之后，dom 不会立即渲染
 3. $nextTick 在 dom 渲染后触发，以获取最新的 dom
 
+## mixin 的缺点
+
+1. 变量来源不明确，不利于阅读
+2. 多 mixin 会造成命名冲突
+3. mixin 和组件可能出现多对多的关系，复杂度变高
+
 ## 杂项
 
 1. computed 有缓存，data 不变不会重新计算
 2. watch 默认是浅层监听，不会深度监听
 3. watch 监听引用类型，拿不到 oldVal
 4. v-html 有 xss 风险
+5. vuex 的组成：state/getter/mutation/action
