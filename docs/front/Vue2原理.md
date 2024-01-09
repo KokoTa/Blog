@@ -6,6 +6,13 @@
 2. 数据驱动视图
 3. MVVM
 
+```js
+                      ViewModel(Vue)
+View(DOM)     --->     DOM Listener     --->     Model(Plain JS Object)
+              <---       Directive      <---
+                   
+```
+
 ## Vue响应式
 
 Vue2 使用 `Object.defineProperty` 实现：
