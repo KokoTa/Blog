@@ -148,7 +148,7 @@ Vue 实例在创建过程中，会对组件选项中的 data 进行初始化
 1. 合理使用 v-show v-if
 2. 合理使用 computed
 3. v-for 加 key，避免和 v-if 同时使用
-4. 自定义和DOM事件要及时销毁
+4. 自定义事件和DOM事件要及时销毁
 5. 合理使用异步组件
 6. 合理使用 keep-alive
 7. data 层级不要太深

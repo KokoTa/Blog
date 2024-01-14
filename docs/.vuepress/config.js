@@ -1,7 +1,7 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2023-12-30 20:33:16
+ * @LastEditTime: 2024-01-11 13:24:54
  * @LastEditors: KokoTa
  * @Description: 
  */
@@ -44,6 +44,7 @@ module.exports = {
           '/front/杂项',
           '/front/Vue2基础',
           '/front/Vue2原理',
+          '/front/Vue3相关',
         ]
       },
       {
