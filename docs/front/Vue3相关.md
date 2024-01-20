@@ -153,7 +153,7 @@
    1. 把 .sync 的功能合并到 v-model 上了
 7. 异步组件写法变化
 8. 移除 filter
-9. teleport
+9.  teleport
    1. 将组件挂在到指定元素上，比如 body
    2. 可以用来实现诸如弹出层的功能
 10. suspense
