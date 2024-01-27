@@ -1,5 +1,14 @@
 # React相关
 
+## React 和 Vue 的异同
+
+1. 都支持组件化
+2. 都是数据驱动视图
+3. 都是用 vdom 操作 DOM
+4. 前者使用 JSX 拥抱 JS，后者使用模板拥抱 HTML
+5. 前者函数式编程(setState 去改变值)，后者声明式编程(直接改变值)
+6. 前者需要更多的手动操作，比如性能优化和语法糖实现
+
 ## Class 的函数为什么需要绑定 this
 
 因为在 JSX 中我们给元素绑定事件的写法通常是 `onClick={this.fn}` ，点击调用时 this 指向就不为实例了，所以需要手动绑定 this；使用静态方法的写法则不需要绑定 this
@@ -32,7 +41,7 @@ t.test()
 
 ## setState
 
-React <= 17:
+React < 18:
 
 1. 不可变值，即不更改原来的值，而是生成一个新的值去替换
 2. 可能是异步更新
@@ -42,6 +51,25 @@ React <= 17:
 3. 可能会被合并
    1. 传入对象时会合并，即多次 `setState({ count: this.state.count + 1 })` 只会累加一次，类似 `Object.assign`
    2. 传入函数时不会合并，即多次 `setState((preState, props) => { count: preState.count + 1 })` 会累加多次
+
+```jsx
+// React < 18 的情况
+componentDidMount() {
+  // 假设 count 初始为 0
+  this.setState({ count: this.state.count + 1 })
+  console.log(this.state.count) // 0
+  this.setState({ count: this.state.count + 1 })
+  console.log(this.state.count) // 0
+  setTimeout(() => {
+    this.setState({ count: this.state.count + 1 })
+    console.log(this.state.count) // 2
+  })
+  setTimeout(() => {
+    this.setState({ count: this.state.count + 1 })
+    console.log(this.state.count) // 3
+  })
+}
+```
 
 React >= 18:
 
@@ -55,11 +83,19 @@ React >= 18:
 
 [链接](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
 
-## 函数组件
+Ajax 应该放在 componentDidMount 中
+
+## 函数组件和 Class 组件的区别
 
 1. 纯函数，输入 props，输出 JSX
 2. 没有实例，没有生命周期，没有 state
 3. 不能扩展其他方法
+
+## 组件间如何通讯
+
+1. 父子组件 props
+2. 自定义事件(CustomEvent)
+3. Redux/Context
 
 ## 受控组件和非受控组件
 
@@ -123,10 +159,12 @@ function App() {
 2. PureComponent 和 React.memo
    1. PureComponent 实现了 SCU 的浅比较，即第一层级比较
    2. memo 相当于函数组件中的 PureComponent
-3. immutable.js
+3. 合理使用 immutable.js
    1. 彻底拥抱不可变数据
    2. 和深拷贝不同，基于共享数据，速度更快
    3. 有一定学习和迁移成本
+4. 减少函数 bind this 次数
+5. 其他参见 Vue 的性能优化
 
 ## 高阶组件(HOC)
 
@@ -168,9 +206,56 @@ HOC 和 Render Props 区别：
 1. 前者模式简单，但是会增加组件层级
 2. 后者代码简洁，但是学习成本高一点
 
+## Redux
+
+* 单向数据流流程：
+  1. action -> dispatch(middleware) -> reducer -> new state -> subscribe
+  2. 中间件为什么要放在 dispatch 阶段？reducer 是一个纯函数，只是根据状态返回新值，因此不在这里加；action 只是生成一个信息对象，因此不在这里加；因此只能放在 dispatch 阶段中
+* react-redux：
+  1. provider
+  2. connect
+  3. mapStateToProps/mapDispatchToProps
+* 异步 action：
+
+  ```js
+  // 同步action
+  const add = (text) => ({
+    type: 'ADD_ITEM',
+    text
+  })
+
+  // 异步action(redux-thunk)
+  const addAsync = (text) => {
+    return (dispatch) => {
+      fetch(url).then((res) => {
+        dispatch(add(res.text))
+      })
+    }
+  }
+  ```
+
+最新的 [redux]((https://cn.redux.js.org/introduction/examples#%E5%BC%82%E6%AD%A5)) 集成了 redux-thunk，实际工作中建议使用 [redux-toolkit](https://redux-toolkit.js.org/tutorials/quick-start)，写法类似 Vue3 的 Vuex
+
+## React-Router 如何配置懒加载
+
+```jsx
+const Home = lazy(() => import('./Home'))
+const About = lazy(() => import('./About'))
+
+const App = () => (
+  <Router>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/about" component={About} />
+      </Switch>
+    </Suspense>
+  </Router>
+)
+```
+
 ## 杂项
 
 1. React 的事件是组合事件而非原生事件，这个和 Vue 是不一样的
-2. React17 开始，事件就不再绑定到 document 上了，而是绑定到 root 组件上，这样会利于多个 React 版本并存，比如微前端
-3. React 可以通过 bind 传递参数，`onClick={this.fn.bind(this, a, b)}`，执行时会把 event 放入最后一个参数，`fn(a, b, eventt) {...}`
-4. React 没有 Vue 的 v-model，需要自己实现，实现的组件可以称作受控组件
+2. React 可以通过 bind 传递参数，`onClick={this.fn.bind(this, a, b)}`，执行时会把 event 放入最后一个参数，`fn(a, b, eventt) {...}`
+3. React 没有 Vue 的 v-model，需要自己实现，实现的组件可以称作受控组件

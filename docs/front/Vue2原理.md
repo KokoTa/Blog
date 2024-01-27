@@ -238,6 +238,8 @@ Vue.component('heading', {
 })
 ```
 
+[在线测试](https://template-explorer.vuejs.org/)
+
 ## 组件渲染
 
 1. 初次渲染过程
