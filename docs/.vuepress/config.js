@@ -1,7 +1,7 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2024-01-25 17:03:40
+ * @LastEditTime: 2024-02-02 23:16:24
  * @LastEditors: KokoTa
  * @Description: 
  */
@@ -47,6 +47,7 @@ module.exports = {
           '/front/Vue3相关',
           '/front/React基础',
           '/front/React原理',
+          '/front/Webpack与Babel',
         ]
       },
       {
