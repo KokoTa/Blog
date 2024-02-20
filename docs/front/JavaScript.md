@@ -131,6 +131,8 @@ fn1()
 console.log(5)
 ```
 
+[async/await 设计原理](https://juejin.cn/post/7007031572238958629)
+
 ## 宏任务和微任务
 
 1. 宏任务：setTimeout、setInterval、Ajax、DOM事件
