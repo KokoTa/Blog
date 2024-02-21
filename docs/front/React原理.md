@@ -143,3 +143,4 @@ fiber 实现两阶段：
 1. reconciliation 阶段进行任务拆分(commit 无法拆分)
 2. DOM 需要渲染时暂停任务，空闲时恢复
 3. window.requestIdleCallback 用于空闲时恢复任务
+4. fiber 使用了链表，提供了中断任务的能力
