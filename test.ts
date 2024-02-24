@@ -1,47 +1,26 @@
-function findMinK(node: any | null, k: number) {
-  const arr: number[] = []
+const arr = [0, 0, 1]
 
-  const inOrder = (n: any | null) => {
-    if (n) {
-      inOrder(n.left)
-      arr.push(n.value)
-      inOrder(n.right)
+0
+
+
+
+function moveZero(nums: number[]) {
+  let j = -1
+
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] === 0) {
+      if (j < 0) j = i
+    }
+
+    if (nums[i] !== 0 && j >= 0) {
+      const temp = nums[i]
+      nums[i] = nums[j]
+      nums[j] = temp
+      j++
     }
   }
-
-  inOrder(node)
-
-  return arr[k - 1]
+  
+  return nums
 }
 
-const tree = {
-  value: 5,
-  left: {
-    value: 3,
-    left: {
-      value: 2,
-      left: null,
-      right: null
-    },
-    right: {
-      value: 4,
-      left: null,
-      right: null
-    }
-  },
-  right: {
-    value: 7,
-    left: {
-      value: 6,
-      left: null,
-      right: null
-    },
-    right: {
-      value: 8,
-      left: null,
-      right: null
-    }
-  }
-}
-
-console.log(findMinK(tree, 7))
+// console.log(moveZero(arr))
