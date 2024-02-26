@@ -21,9 +21,13 @@
 
 ## 组件间如何通讯
 
-1. props + $emit
-2. event bus（记得解绑事件，避免内存泄漏）
-3. vuex
+1. props + $emit：适合父子组件
+2. event bus（记得解绑事件，避免内存泄漏），Vue2 可以 `new Vue()`，Vue3 要使用第三方库 `event-emitter`：适合跨组件
+3. $attr：是 `props + emits` 的候补，用于保存传入组件但是没有声明的 `props + emits`，适合父子组件
+4. $parent：获取父节点引用，适合父子组件
+5. $refs：获取子节点引用，适合父子组件
+6. provide/inject：类似 React 的 context，适合跨组件
+7. vuex：适合全局组件
 
 ## 生命周期
 
@@ -157,15 +161,19 @@ Vue 实例在创建过程中，会对组件选项中的 data 进行初始化
 10. 前端通用优化，比如图片懒加载等
 11. 使用 SSR
 
+## Vue computed 和 watch 区别
+
+1. 前者用于计算生成新的数据，后者用于监听现有数据
+2. 前者有缓存，data 不变不会重新计算
+3. 后者默认是浅层监听，不会深度监听
+4. 后者监听引用类型，拿不到 oldVal
+
 ## 杂项
 
-1. computed 有缓存，data 不变不会重新计算
-2. watch 默认是浅层监听，不会深度监听
-3. watch 监听引用类型，拿不到 oldVal
-4. v-html 有 xss 风险
-5. vuex 的组成：state/getter/mutation/action
-6. vuex action 处理异步，mutation 不行；mutation 做原子操作；action 可以整合多个 mutation
-7. 在 mounted 阶段进行数据获取是比较常见的做法，因为此时可以操作 DOM 了
-8. 多个组件有相同逻辑，可以使用 mixin
-9. 加载大组件或者路由组件时，可以使用异步组件
-10. 当需要缓存组件不需要重复渲染时，比如静态 tab，可以使用 keep-alive
+1. v-html 有 xss 风险
+2. vuex 的组成：state/getter/mutation/action
+3. vuex action 处理异步，mutation 不行；mutation 做原子操作；action 可以整合多个 mutation
+4. 在 mounted 阶段进行数据获取是比较常见的做法，因为此时可以操作 DOM 了
+5. 多个组件有相同逻辑，可以使用 mixin
+6. 加载大组件或者路由组件时，可以使用异步组件
+7. 当需要缓存组件不需要重复渲染时，比如静态 tab，可以使用 keep-alive

@@ -1,7 +1,7 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2024-02-20 17:05:02
+ * @LastEditTime: 2024-02-26 13:19:50
  * @LastEditors: KokoTa
  * @Description: 
  */
@@ -32,7 +32,6 @@ module.exports = {
           '/front/移动端适配',
           '/front/JS精度问题',
           '/front/服务端踩坑日记',
-          '/front/前端问题汇总',
           '/front/微信开发',
           '/front/JS的this',
           '/front/缓存',
@@ -51,6 +50,7 @@ module.exports = {
           '/front/Webpack与Babel',
           '/front/项目设计',
           '/front/算法相关',
+          '/front/前端问题汇总',
         ]
       },
       {
