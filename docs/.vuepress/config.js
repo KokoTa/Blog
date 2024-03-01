@@ -1,7 +1,7 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2024-02-26 13:19:50
+ * @LastEditTime: 2024-03-01 15:09:55
  * @LastEditors: KokoTa
  * @Description: 
  */
@@ -36,10 +36,8 @@ module.exports = {
           '/front/JS的this',
           '/front/缓存',
           '/front/MVVM',
-          '/front/混合开发',
           '/front/直播',
           '/front/内网穿透',
-          '/front/工程化',
           '/front/杂项',
           '/front/Vue2基础',
           '/front/Vue2原理',
@@ -48,6 +46,8 @@ module.exports = {
           '/front/React原理',
           '/front/ReactHook',
           '/front/Webpack与Babel',
+          '/front/混合开发',
+          '/front/微服务',
           '/front/项目设计',
           '/front/算法相关',
           '/front/前端问题汇总',

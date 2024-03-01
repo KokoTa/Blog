@@ -1,5 +1,16 @@
 # Webpack与Babel
 
+## 为什么使用 webpack
+
+1. 模块化
+2. 代码压缩
+3. 代码分割
+4. 代码校验
+5. 代码优化
+6. 兼容性处理
+7. 本地服务器
+8. 热更新
+
 ## 基本配置(6条)
 
 1. 配置拆分和 merge
@@ -577,6 +588,17 @@ if (isDev) {
 1. 前者是打包构建工具，是多个 loader/plugin 的集合
 2. 后者是 JS 新语法编译工具，不关心模块化
 
+## Webpack/Rollup/Vite 对比
+
+[Webpack/Rollup/Vite 对比](https://juejin.cn/post/7097493230572273700?searchId=20231221214358EA579256433B7D0B9706)
+
+## Webpack 是如何实现懒加载的
+
+1. 代码分割，分成不同的 chunk
+2. 将 chunk 打包成单独的文件
+3. 前端触发 HTTP 请求该文件
+4. 文件通过 script 标签引入并执行
+
 ## 如何产出一个 lib
 
 参考 DllPlugin 示例
@@ -586,3 +608,32 @@ if (isDev) {
 1. Class 可以通过 function 模拟
 2. Promise 可以通过 callback 模拟
 3. Proxy 无法通过 Object.defineProperty 模拟
+
+## 输入 npm install 会发生了什么
+
+1. 查找 npm  配置信息：检查项目中是否有 `.npmrc` 文件，如果没有就去检查全局 `.npmrc`，如果还没有就使用 npm 内置的默认配置
+2. 构建依赖树：如果项目中有 `package-lock.json`，则会判断该文件和 `package.json` 中的依赖版本是否一致，如果一致则使用 lock 的信息，否则使用 `package.json` 的信息；如果没有 lock 就用 `package.json`
+3. 下载资源：如果有缓存，直接解压到项目 `node_modules` 中，如果没有就远程下载再解压
+4. 生成 package-lock.json：如果项目中没有 lock 文件，就生成一个，有就进行更新
+
+## 如何解决包冲突
+
+[npm 处理依赖与依赖冲突](https://aprilandjan.github.io/npm/2019/08/02/how-npm-handles-dependency-version-conflict/)
+
+**包冲突是什么**：
+
+是指不同依赖模块对同一个包有不同版本的要求，即同一个包存在多个版本的情况
+
+**npm 如何解决包冲突**：
+
+1. 如果没有包冲突，通常会使用扁平化结构。扁平化结构将所有依赖包都放在工程根目录下的 node_modules，避免了重复下载的情况
+2. 如果存在包冲突，npm 会采用树形结构来确保不同版本的包不会相互影响。如果不同依赖模块对同一个包有不兼容的版本要求，npm 会将这些包分别安装在不同的目录下，避免了包冲突的问题
+
+**pnpm 如何解决包冲突**：
+
+1. pnpm 使用扁平化结构，所有依赖放在全局的 store 中，避免了重复下载的情况
+2. pnpm 通过硬链接和软连接，避免了包冲突的问题
+
+**peerDependencies 配置解决包冲突**：
+
+比如项目中依赖了 2.0，某个插件中依赖了 1.0, 这个时候就会在项目的 `node_modules` 安装 2.0，在插件的 `node_modules` 安装 1.0。如果插件设置了 peerDependencies，则插件会依赖项目的 2.0，而不会安装 1.0，这避免了包冲突，但是如果版本之间有较大改动，就会出问题
