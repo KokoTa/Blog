@@ -1,7 +1,7 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2024-03-01 15:09:55
+ * @LastEditTime: 2024-03-02 12:04:29
  * @LastEditors: KokoTa
  * @Description: 
  */
@@ -46,7 +46,7 @@ module.exports = {
           '/front/React原理',
           '/front/ReactHook',
           '/front/Webpack与Babel',
-          '/front/混合开发',
+          '/front/跨端开发',
           '/front/微服务',
           '/front/项目设计',
           '/front/算法相关',

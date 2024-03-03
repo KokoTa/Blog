@@ -42,6 +42,7 @@
 1. 针对一个响应式对象(reactive) 的属性，转为一个 ref
 2. 让这两者保持引用关系
 3. 防止属性失去响应式
+
 4. ```js
    // 用法示例
 
@@ -62,6 +63,7 @@
 2. 普通对象中的每个属性，都是一个 ref
 3. 让这两者保持引用关系
 4. 防止解构失去响应式
+
 5. ```js
    // 用法示例
 
@@ -93,6 +95,7 @@
    1. ref 是一个对象，value 存储值
    2. 通过 .value 的 get/set 实现响应式
    3. 用于 模板/reactive 时，不需要 .value，其他情况都需要
+
    4. ```js
       // 通过 .value 将值类型转为对象的属性值
       // 通过对象的引用特性完成值更新
@@ -119,6 +122,7 @@
       // 1s 后获取的值为 null
       const b = computed2(() => 100)
       ```
+
 3. 为何需要 toRef 和 toRefs：
    1. 不丢失响应式的情况下，把对象数据 分解/扩散(解构)
    2. 针对的是响应式对象(reactive)，而非普通对象
@@ -127,6 +131,7 @@
 ## Vue3 更新了什么
 
 1. createApp
+
    1. ```js
       const app = createApp(...)
       app.use(...)
@@ -135,18 +140,23 @@
       app.directive(...)
       app.mount(...)
       ```
+
 2. emits 属性
+
    1. ```js
       export default {
         emits: [...],
         setup(props, { emit }) {}
       }
       ```
+
 3. 生命周期变化
 4. 多事件
+
    1. ```html
       <button @click="one($event), two($event)">submit</button>
       ```
+
 5. Fragment
    1. template 标签下可以存在多个根节点了
 6. 移除 .sync

@@ -8,11 +8,9 @@
 
 ## v-for 的 key 有什么用
 
-1. v-for 和 v-if 不能一起使用，如果一起使用了，vue2和vue3的优先级是不同的，vue2 v-if 优先，vue3 v-for 优先
-2. diff 算法中通过 tag 和 key 判断是否是 sameNode
-3. key 可以减少渲染次数、提高渲染性能，避免重复删除和创建元素
-4. key 可以避免数据混乱，确保跟踪的节点身份，以便重用和重排元素
-5. key 不能乱写，不能为 random 或 index
+1. vdom diff 算法会根据 key 判断元素是否要删除
+2. 匹配了 key，则只移动元素，性能较好
+3. 未匹配到 key，则会删除重建，性能较差
 
 ## 事件类型
 
@@ -36,6 +34,36 @@
 3. 销毁阶段：beforeDestroy/destroyed
 4. keep-alive：activated/deactivated
 5. 错误捕获：errorCaptured
+
+## 每个生命周期都做了什么
+
+1. beforeCreate:
+   1. 创建空白 Vue 实例
+   2. data/method 尚未被初始化，不可使用
+2. created：
+   1. Vue 实例初始化完成，完成响应式绑定
+   2. data/method 都已经初始化完成，可以使用
+   3. 尚未开始渲染模板
+3. beforeMount：
+   1. 编译模板，调用 render 生成 vdom
+   2. 还没有开始渲染 DOM
+4. mounted:
+   1. 完成了 DOM 渲染
+   2. 组件创建完成
+   3. 开始从创建阶段进入运行阶段
+5. beforeUpdate：
+   1. data 发生变化
+   2. 准备更新 DOM (尚未更新 DOM)
+6. updated:
+   1. data 发生变化
+   2. DOM 更新完成
+   3. 不要在该钩子中修改 data，可能导致死循环
+7. beforeDestroy：
+   1. 组件进入销毁阶段(尚未销毁，可正常使用)
+   2. 可移除、解绑一些全局事件、自定义事件
+8. destroyed：
+   1. 组件被销毁
+   2. 所有子组件也被销毁
 
 ## 父子组件生命周期顺序
 
@@ -168,6 +196,11 @@ Vue 实例在创建过程中，会对组件选项中的 data 进行初始化
 3. 后者默认是浅层监听，不会深度监听
 4. 后者监听引用类型，拿不到 oldVal
 
+## Vue 什么时候操作 DOM 比较合适
+
+1. mounted 和 updated 都不能保证子组件全部挂载完成
+2. 在这两个钩子中使用 $nextTick 操作 DOM 比较合适
+
 ## 杂项
 
 1. v-html 有 xss 风险
@@ -177,3 +210,4 @@ Vue 实例在创建过程中，会对组件选项中的 data 进行初始化
 5. 多个组件有相同逻辑，可以使用 mixin
 6. 加载大组件或者路由组件时，可以使用异步组件
 7. 当需要缓存组件不需要重复渲染时，比如静态 tab，可以使用 keep-alive
+8. v-for 和 v-if 不能一起使用，如果一起使用了，vue2和vue3的优先级是不同的，vue2 v-if 优先，vue3 v-for 优先
