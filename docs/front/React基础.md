@@ -153,18 +153,69 @@ function App() {
 
 ## 性能优化
 
-1. SCU(shouldComponentUpdate，默认返回 true)
+1. 修改 CSS 模拟 v-show
+2. 循环使用 key
+3. 使用 Fragment 减少层级
+4. JSX 中不要定义函数
+5. 在构造函数中 bind this，而不是在 JSX 中
+6. useMemo 缓存数据，useCallback 缓存函数
+7. SCU(shouldComponentUpdate，默认返回 true)
    1. 为什么需要这个生命周期？因为 React 默认情况下，父组件更新，所有子组件都会更新，即使子组件数据没有发生变化，因此需要有一个生命周期来控制更新
    2. state 的值如果是数组，不能通过 `this.state.push()` 去添加新元素，因为这相当于更改了原始值，破坏了 immutable 的规则，同时由于修改了原始值，在 SCU 时新旧值将永远相同，无法判断是否可以更新
-2. PureComponent 和 React.memo
+8. PureComponent 和 React.memo
    1. PureComponent 实现了 SCU 的浅比较，即第一层级比较
    2. memo 相当于函数组件中的 PureComponent
-3. 合理使用 immutable.js
+9. 合理使用 immutable.js
    1. 彻底拥抱不可变数据
    2. 和深拷贝不同，基于共享数据，速度更快
    3. 有一定学习和迁移成本
-4. 减少函数 bind this 次数
-5. 其他参见 Vue 的性能优化
+10. 合理使用异步组件
+11. 路由懒加载
+12. SSR
+13. 自定义事件和DOM事件要及时销毁
+14. webpack 优化
+15. 前端通用优化，比如图片懒加载等
+
+## React 中遇到的坑
+
+1. 自定义组件名称要大写
+2. JS 关键词冲突，比如 `class -> className，for -> htmlFor`
+3. JSX 数据类型，比如 `<Demo flag="1" />，<Demo flag={1} />`
+4. setState 是异步的
+
+## 如何统一监听 React 组件报错
+
+1. ErrorBoundary 组件
+   1. 监听所有下级组件报错，还可以降级展示 UI
+   2. 只监听组件渲染报错，不监听 DOM 事件、异步报错
+   3. 只在 prod 环境生效，dev 环境会直接抛出错误
+
+    ```js
+    class ErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = { error: null }
+      }
+      static getDerivedStateFromError(error) {
+        // 更新 state ，让下一次渲染显示降级后的 UI
+        return { error }
+      }
+      componentDidCatch(error, info) {
+        // 统计上报错误信息
+        console.log(error, info)
+      }
+      render() {
+        if (this.state.error) {
+          return <h1>报错了</h1>
+        }
+        return this.props.children
+      }
+    }
+    ```
+
+2. try/catch，处理同步报错
+3. window.error，处理同步和异步报错
+4. window.onunhandledrejection，处理 Promise 报错
 
 ## 高阶组件(HOC)
 

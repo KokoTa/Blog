@@ -15,11 +15,37 @@
 
 ## Cookie
 
-我们先来说说cookie：  
+我们先来说说cookie：
+
 它是用来存放client信息的对象，每次请求时都会发送给server。  
 cookie是不可跨域的，如果不想让js操作某cookie键值，可以设置httpOnly属性使之只能在server操作。  
 机智的人民群众当年把用户名和密码简单加密后存放在cookie上，最后被黑客们捅爆了菊花。  
 因为敏感信息完全暴露，所以这是一个不靠谱的方法。  
+
+cookie 总结：
+
+1. HTTP 无状态，每次请求都要带 cookie，用来识别身份
+2. 服务端也可以向客户端 set-cookie，cookie 大小限制 4kb
+3. 默认有跨域限制：不可跨域共享和传递 cookie
+4. Ajax 通过设置 withCredentials=true，可以将cookie传递给服务器，同时服务端也要做相应配置
+5. 现代浏览器开始禁止第三方 cookie，即禁止网页引入第三方 js 设置 cookie，目的是为了打击第三方广告，保护用户隐私
+6. 新增了属性 [SameSite](https://www.ruanyifeng.com/blog/2019/09/cookie-samesite.html) 来控制第三方 cookie
+
+举一个第三方 cookie 的例子，详细见 [这里](https://zhuanlan.zhihu.com/p/436187550)：
+
+网页 A 是一个手机信息网站，引入了 B 的 js 广告，B 的 js 可以向 B 的 cookie 设置 "用户访问了 A 网站" 这个信息，当用户访问 B 的时候，B 网站读取 cookie 发现 "用户访问了 A 网站" 查看手机信息，因此可以据此推送手机广告。现在这种骚操作已经禁止了。
+
+关于 cookie 的携带问题：
+
+1. Ajax 请求：
+   1. 当您在当前站点（A 网站）上发送 Ajax 请求 时，浏览器会自动携带当前站点（A 网站）的 cookie。
+   2. 这意味着您的身份验证信息（例如登录状态）会随着请求一起发送到目标地址（B 网站）。
+2. 图片和表单：
+   1. 当您在当前站点（A 网站）上加载图片或提交表单时，浏览器会根据请求的目标地址（例如图片的 URL 或表单的 `action` 属性）来决定携带哪个站点的 cookie。
+   2. 如果图片或表单的目标地址是目标站点（B 网站），则浏览器会携带目标站点（B 网站）的 cookie。
+   3. 如果目标地址是当前站点（A 网站）自身，那么浏览器会携带当前站点（A 网站）的 cookie。
+
+总之，Ajax 请求 会携带当前站点的 cookie，而加载图片和提交表单时，浏览器会根据目标地址来决定携带哪个站点的 cookie。
 
 ## Session
 

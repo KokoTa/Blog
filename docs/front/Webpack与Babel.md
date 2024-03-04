@@ -594,10 +594,7 @@ if (isDev) {
 
 ## Webpack 是如何实现懒加载的
 
-1. 代码分割，分成不同的 chunk
-2. 将 chunk 打包成单独的文件
-3. 前端触发 HTTP 请求该文件
-4. 文件通过 script 标签引入并执行
+[Webpack 懒加载原理](https://juejin.cn/post/7225989692562047033?from=search-suggest)
 
 ## 如何产出一个 lib
 

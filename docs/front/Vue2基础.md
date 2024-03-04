@@ -180,14 +180,15 @@ Vue 实例在创建过程中，会对组件选项中的 data 进行初始化
 1. 合理使用 v-show v-if
 2. 合理使用 computed
 3. v-for 加 key，避免和 v-if 同时使用
-4. 自定义事件和DOM事件要及时销毁
-5. 合理使用异步组件
-6. 合理使用 keep-alive
-7. data 层级不要太深
-8. 使用 vue-loader 在开发环境做模板编译(预编译)
-9. webpack 优化
-10. 前端通用优化，比如图片懒加载等
-11. 使用 SSR
+4. data 层级不要太深
+5. 合理使用 keep-alive
+6. 使用 vue-loader 在开发环境做模板编译(预编译)
+7. 合理使用异步组件
+8. 路由懒加载
+9. SSR
+10. 自定义事件和DOM事件要及时销毁
+11. webpack 优化
+12. 前端通用优化，比如图片懒加载等
 
 ## Vue computed 和 watch 区别
 
@@ -200,6 +201,42 @@ Vue 实例在创建过程中，会对组件选项中的 data 进行初始化
 
 1. mounted 和 updated 都不能保证子组件全部挂载完成
 2. 在这两个钩子中使用 $nextTick 操作 DOM 比较合适
+
+## Vue 中遇到的坑
+
+1. 内存泄漏：考虑全局变量、全局事件、全局定时器、自定义事件的解绑
+2. Vue2 响应式缺陷：这块可以看 `Vue3相关.md`
+3. 路由切换时会 scroll 到顶部：SPA 的通病，可以在列表页缓存数据和 scrollTop 值，当返回后渲染缓存数据并执行 scrollTo；终极方案：MPA + APP Webview，其实就是在 A 页面上盖一个 webview，然后在 webview 中渲染 B 页面
+
+## 如何统一监听 Vue 组件报错
+
+1. 使用 Vue 的 errorCaptured 生命周期监听组件报错
+   1. 监听所有下级组件报错
+   2. 返回 false 会阻止向上传播(不返回也会向上传播，一定是返回 false 才阻止)
+
+      ```js
+      // component
+      export default {
+         errorCaptured(err, vm, info) {
+            console.log(err, vm, info)
+         }
+      }
+      ```
+
+2. 使用 Vue 的 errorHandler 配置
+   1. Vue 全局报错监听，所有组件报错都会汇总到这里
+   2. 但 errorCaptured 返回 false，则不会传播到这里
+   3. 使用了 errorHandler，window.error 就不会触发了
+
+      ```js
+      // main.js
+      app.config.errorHandler = (err, vm, info) => {
+         console.log(err, vm, info)
+      }
+      ```
+
+3. window.onerror 可以监听 js 报错，但是无法识别 Vue 组件的信息(不知道哪个组件报错)。上面的两个方式可以监听同步报错，但是无法监听异步报错，使用 window.onerror 可以监听同步和异步报错
+4. window.onunhandledrejection，处理 Promise 报错
 
 ## 杂项
 
