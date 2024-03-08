@@ -190,14 +190,14 @@ class MyPromise {
   rejectArr = [] // pending 状态下存储失败的回调
 
   constructor(fn) {
-    const fn1 = (value) => {
+    const resolve = (value) => {
       if (this.status === 'pending') {
         this.status = 'fulfilled'
         this.value = value
         this.resolveArr.forEach((fn) => fn(this.value))
       }
     }
-    const fn2 = (reason) => {
+    const reject = (reason) => {
       if (this.status === 'pending') {
         this.status ='rejected'
         this.reason = reason
@@ -206,9 +206,9 @@ class MyPromise {
     }
     
     try {
-      fn(fn1, fn2)
+      fn(resolve, reject)
     } catch (error) {
-      fn2(error)
+      reject(error)
     }
   }
 
@@ -253,7 +253,7 @@ class MyPromise {
       return new MyPromise((resolve, reject) => {
         try {
           const newReason = fn2(this.reason)
-          reject(newReason)
+          resolve(newReason)
         } catch (error) {
           reject(error)
         }
