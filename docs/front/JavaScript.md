@@ -505,3 +505,55 @@ function isEqual(obj1, obj2) {
     return true
 }
 ```
+
+## 数组扁平化
+
+1. 单层扁平化：
+
+    ```js
+    // 方案一：使用 flat API
+    const arr = [1, 2, [3, 4, [5, 6]]]
+    const res = arr.flat()
+    console.log(res)
+
+    // 方案二：forEach + push
+    const arr = [1, 2, [3, 4, [5, 6]]]
+    const res = []
+    arr.forEach((item) => {
+      if (Array.isArray(item)) {
+        item.forEach((subItem) => {
+          res.push(subItem)
+        })
+      } else {
+        res.push(item)
+      }
+    })
+    console.log(res)
+
+    // 方案三：forEach + concat
+    const arr = [1, 2, [3, 4, [5, 6]]]
+    let res = []
+    arr.forEach((item) => {
+      res = res.concat(item)
+    })
+    console.log(res)
+    ```
+
+2. 全部扁平化：
+
+    ```js
+    // 方案一：使用 flat API
+    const arr = [1, 2, [3, 4, [5, 6]]]
+    console.log(arr.flat(Infinity))
+
+    // 方案二：使用 toString API -- 只能用于值类型
+    const arr = [1, 2, [3, 4, [5, 6]]]
+    const res = arr.toString().split(',')
+    console.log(res)
+
+    // 方案三：reduce + concat + 递归
+    const arr = [1, 2, [3, 4, [5, 6]]]
+    const flatten = (arrary) => arrary.reduce((prev, cur) => prev.concat(Array.isArray(cur) ? flatten(cur) : cur), []);
+    const res = flatten(arr);
+    console.log(res);
+    ```

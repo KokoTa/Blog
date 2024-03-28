@@ -1,9 +1,9 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2024-03-02 12:04:29
+ * @LastEditTime: 2024-03-28 15:10:30
  * @LastEditors: KokoTa
- * @Description: 
+ * @Description:
  */
 module.exports = {
   base: '/blog/',
@@ -51,6 +51,7 @@ module.exports = {
           '/front/项目设计',
           '/front/算法相关',
           '/front/前端问题汇总',
+          '/front/掘金文章',
         ]
       },
       {
