@@ -24,3 +24,68 @@
 
 1. 缓存 DOM 查询结果，以方便复用
 2. 将频繁的操作改为一次性操作，比如要批量插入 dom 可以使用 `createDocumentFragment`
+
+## 遍历 DOM 树
+
+```js
+function visitNode(node) {
+  // 注释
+  if (node instanceof Comment) {
+    console.log('comment: ' + node.textContent)
+  }
+  // 文本
+  if (node instanceof Text) {
+    console.log('text: ' + node.textContent.trim())
+  }
+  // 元素
+  if (node instanceof Element) {
+    console.log('element: ' + node.tagName)
+  }
+  // 
+}
+
+// 深度优先
+function depthFirstTraverse(node) {
+  visitNode(node)
+  if (node.childNodes.length > 0) { // .childNodes 会获取所有类型的节点，.children 只会获取元素节点
+    for (let i = 0; i < node.childNodes.length; i++) {
+      depthFirstTraverse(node.childNodes[i])
+    }
+  }
+}
+
+// 广度优先
+function breadthFirstTraverse(node) {
+  const queue = [node]
+  while (queue.length > 0) {
+    const current = queue.shift()
+    visitNode(current)
+    for (let i = 0; i < current.childNodes.length; i++) {
+      queue.push(current.childNodes[i])
+    }
+  }
+}
+
+// 深度优先(不使用递归)
+// 需要使用栈，入栈的顺序是相反的
+// 比如：
+//       a
+//   b      c
+// e   f  g   h
+// 1. a 入栈，此时栈为 空
+// 2. a 出栈，发现有子节点 bc，反向入栈，此时栈为 cb
+// 3. b 出栈，发现有子节点 ef，反向入栈，此时栈为 cfe
+// 4. e 出栈，没有子节点
+// 5. f 出栈，没有子节点
+// ...
+function depthFirstTraverse2(node) {
+  const stack = [node]
+  while (stack.length > 0) {
+    const current = stack.pop()
+    visitNode(current)
+    for (let i = current.childNodes.length - 1; i >= 0; i--) {
+      queue.push(current.childNodes[i])
+    }
+  }
+}
+```

@@ -406,32 +406,45 @@ class jQuery {
 ## 实现 call/apply/bind
 
 ```js
-Function.prototype.call = function(context) {
+Function.prototype.call = function(context, ...args) {
+  if (context == null) context = globalThis
+  if (typeof context !== 'object') context = new Object(context) // 将值类型转为对应的对象类型
   const self = this
-  const args = Array.prototype.slice.call(arguments, 1)
-  context.fn = self
-  const result = context.fn(...args)
-  delete context.fn
+  const key = Symbol() // 避免属性重复
+  context[key] = self
+  const result = context[key](...args)
+  delete context[key]
   return result
 }
 
-Function.prototype.apply = function(context, args) {
-  const self = this
-  context.fn = self
-  const result = context.fn(...args)
-  delete context.fn
-  return result
-}
-
-Function.prototype.bind = function(context) {
+Function.prototype.bind = function(context, ...args1) {
+  if (context == null) context = globalThis
+  if (typeof context !== 'object') context = new Object(context)
   const self = this // 指向调用的函数
-  const args = Array.prototype.slice.call(arguments, 1) // 将参数转为数组，获取除第一个参数以外的参数
-
-  return function() {
+  return function(...args2) {
     return self.apply(
       context,
-      args.concat(Array.prototype.slice.call(arguments)) // 合并参数
+      args1.concat(args2) // 合并参数
     )
+  }
+}
+```
+
+## 实现 instanceof
+
+```js
+function myInstanceof(instance, origin) {
+  // 排除 null 和 undefined
+  if (instance == null) return false
+
+  // 排除值类型
+  const type = typeof instance
+  if (type !== 'object' && type !== 'function') return false
+
+  let tempInstance = instance // 防止修改 instance
+  while (tempInstance) {
+    if (tempInstance === origin.prototype) return true
+    tempInstance = tempInstance.__proto__
   }
 }
 ```
@@ -557,3 +570,78 @@ function isEqual(obj1, obj2) {
     const res = flatten(arr);
     console.log(res);
     ```
+
+## LazyMan
+
+1. 支持 sleep 和 eat 方法
+2. 支持链式调用
+
+```ts
+class LazyMan {
+  private name: string = ''
+  private tasks: Function[] = []
+
+  constructor(name: string) {
+    this.name = name
+    setTimeout(() => this.next()) // 等待同步都执行结束后再执行
+  }
+
+  private next() {
+    const task = this.tasks.shift() // 取出 tasks 的第一个任务
+    task && task()
+  }
+
+  eat(food: string) {
+    this.tasks.push(() => {
+      console.log(`${this.name} is eating ${food}`)
+      this.next()
+    })
+    return this
+  }
+
+  sleep(seconds: number) {
+    this.tasks.push(() => {
+      console.log(`${this.name} is sleeping ${seconds}s`)
+      setTimeout(() => {
+        this.next()
+      }, seconds * 1000)
+    })
+    return this
+  }
+}
+
+const man = new LazyMan('Brain')
+man.eat('apple').sleep(2).eat('banana')
+```
+
+## 柯里化
+
+```ts
+function curry(fn: Function) {
+  const fnArgLength = fn.length // 获取函数参数长度
+  let totalArgs: number[] = []
+
+  function calc(...args) {
+    // 积累参数
+    totalArgs = [...totalArgs, ...args]
+
+    if (totalArgs.length < fnArgLength) {
+      // 参数不足，返回函数
+      return calc
+    } else {
+      // 参数足够，返回结果
+      // 注意这里的 apply，因为 calc 可能被指定 this 后调用，比如 curryAdd.call({...}, 1)
+      return fn.apply(this, totalArgs.slice(0, fnArgLength))
+    }
+  }
+
+  return calc
+}
+
+function add(a: number, b: number, c: number) {
+  return a + b + c
+}
+
+const curryAdd = curry(add)
+curryAdd(1)(2)(3) // 6
+```
