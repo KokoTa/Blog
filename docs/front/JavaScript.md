@@ -328,7 +328,10 @@ MyPromise.race = (promises = []) => {
 }
 ```
 
-## 实现深拷贝
+## 实现普通深拷贝
+
+1. 只考虑 Object/Array
+2. 不考虑 Map/Set/循环引用
 
 ```js
 const obj1 = {
@@ -370,6 +373,62 @@ obj2.address.city = 'Xiamen'
 
 console.log(obj1)
 console.log(obj2)
+```
+
+## 实现高级深拷贝
+
+考虑 Map/Set/循环引用
+
+JSON.stringify 的缺点：
+
+1. 无法转换函数(会被忽略)
+2. 无法转换 Map/Set(会被隐式转换)
+3. 无法转换循环引用(会报错)
+
+```ts
+function deepClone(obj: any, map = new WeakMap()): any {
+   if (typeof obj !== 'object' || obj == null) return obj
+
+  // 使用 WeakMap 避免循环引用
+  const objFromMap = map.get(obj)
+  if (objFromMap) return objFromMap
+
+  let target: any = {}
+  map.set(obj, target)
+
+  // Map
+  if (obj instanceof Map) {
+    target = new Map()
+    obj.forEach((value, key) => {
+      const k = deepClone(key, map) // Map 的 key 不一定是字符串，需要深拷贝
+      const v = deepClone(value, map)
+      target.set(k, v)
+    })
+  }
+
+  // Set
+  if (obj instanceof Set) {
+    target = new Set()
+    obj.forEach(value => {
+      const v = deepClone(value, map)
+      target.add(v)
+    })
+  }
+
+  // Arrray
+  if (obj instanceof Array) {
+    target = obj.map((item) => deepClone(item, map))
+  }
+
+  // Object
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      target[key] = deepClone(obj[key], map)
+    }
+  }
+
+  return target
+}
 ```
 
 ## 实现简单的 jQuery
@@ -644,4 +703,251 @@ function add(a: number, b: number, c: number) {
 
 const curryAdd = curry(add)
 curryAdd(1)(2)(3) // 6
+```
+
+## EventBus
+
+需要实现 on/once/emit/off
+
+```ts
+class MyEventBus {
+  // 存储的数据格式
+  // {
+  //   [key]: [
+  //     { fn: fn1, isOnce: false },
+  //     { fn: fn2, isOnce: true }
+  //   ]
+  // }
+  private events: { [key: string]: Array<{ fn: Function, isOnce: boolean }> }
+
+  constructor() {
+    this.events = {}
+  }
+
+  on(type: string, fn: Function, isOnce: Boolean = false) {
+    if (this.events[type] == null) {
+      this.events[type] = []
+    }
+    this.events[type].push({ fn, isOnce: false })
+  }
+
+  once(type: string, fn: Function) {
+    this.on(type, fn, true)
+  }
+
+  off(type: string, fn?: Function) {
+    if (!fn) { // 解绑所有
+      this.events[type] = []
+    } else { // 解绑单个
+      this.events[type] = this.events[type].filter(item => item.fn !== fn)
+    }
+  }
+
+  emit(type: string, ...args: any[]) {
+    if (!this.events[type] && !this.events[type].length) return
+    this.events[type].filter((event) => {
+      const { fn, isOnce } = event
+      fn(...args)
+      return !isOnce
+    })
+  }
+}
+```
+
+## LRU 缓存
+
+即最近使用缓存
+
+1. 使用哈希表实现 get/set，才能有 O(1) 复杂度
+2. 必须是有序的，常用数据放在前面，不常用的放在后面
+3. 哈希 + 有序 = Map，Map 结合了数组和链表的优点
+
+```ts
+class LRUCache {
+  private length: number
+  private data: Map<any, any> = new Map()
+
+  constructor(length: number) {
+    if (length < 1) throw new Error('length must be greater than 0')
+    this.length = length
+  }
+
+  set(key: any, value: any) {
+    const data = this.data
+    // 删除旧数据
+    if (data.has(key)) {
+      data.delete(key)
+    }
+    // 新增数据(map.set 时会把数据放最前面)
+    data.set(key, value)
+    // 如果超出容量限制，则删除最后面的数据
+    if (data.size > this.length) {
+      data.delete(data.keys().next().value)
+    }
+  }
+
+  get(key: any) {
+    const data = this.data
+
+    if (!data.has(key)) return null
+
+    const value = data.get(key)
+
+    // 把数据放最前面
+    data.delete(key)
+    data.set(key, value)
+
+    return value
+  }
+}
+
+const lruCache = new LRUCache(2)
+lruCache.set('a', 1) // a=>1
+lruCache.set('b', 2) // a=>1 b=>2
+lruCache.set('c', 3) // b=>2 c=>3
+lruCache.set('d', 4) // c=>3 d=>4
+lruCache.get('c') // d=>4 c=>3
+lruCache.set('e', 5) // c=>3 e=>5
+```
+
+不适用 Map，如何实现 LRU？
+
+可以使用 Object + Array 模拟 Map 的效果
+
+```ts
+const obj1 = { key: 'a', value: 1 }
+const obj2 = { key: 'b', value: 2 }
+const obj3 = { key: 'c', value: 3 }
+
+const data = [obj1, obj2, obj3] // 有序
+const map = { a: obj1, b: obj2, c: obj3 } // 哈希
+```
+
+但是存在性能问题，数组的 shift/splice 效率低
+
+比如第一个元素移除，后续所有元素都需要移动
+
+可以使用 双向链表 优化性能，它的 新增/删除/移动 效率高
+
+```ts
+interface IListNode {
+  key: string // 存储 key 方便查找和删除，避免遍历
+  value: any
+  prev?: IListNode
+  next?: IListNode
+}
+
+class LRUCache {
+  private length: number
+  private data: { [key: string]: IListNode } = {}
+  private dataLength: number = 0
+  private head: IListNode | null = null
+  private tail: IListNode | null = null
+
+  constructor(length: number) {
+    if (length < 1) throw new Error('length must be greater than 0')
+    this.length = length
+  }
+
+  // 将元素移动到最后
+  private moveToTail(node: IListNode) {
+    const prevNode = node.prev
+    const nextNode = node.next
+
+    // 如果是最后一个节点，就不管
+    if (node === this.tail) return
+
+    // 如果这个节点是头节点，则需要更新 head
+    if (this.head === node && nextNode) this.head = nextNode
+
+    // 1. 让 prevNode/nextNode 断绝与 node 的关系
+    if (prevNode && nextNode) {
+      prevNode.next = nextNode
+      nextNode.prev = prevNode
+    }
+    if (prevNode && !nextNode) {
+      delete prevNode.next
+    }
+    if (!prevNode && nextNode) {
+      delete nextNode.prev
+    }
+
+    // 2. 让 node 断绝与 prevNode/nextNode 的关系
+    delete node.prev
+    delete node.next
+
+    // 3. 在末尾建立 node 的新关系
+    if (this.tail) {
+      this.tail.next = node
+      node.prev = this.tail
+    }
+    this.tail = node
+  }
+
+  // 清除头节点(最旧的节点)
+  private tryClean() {
+    while (this.dataLength > this.length) {
+      const head = this.head
+      const headNext = head?.next
+      if (head == null) throw new Error('head is null')
+      if (headNext == null) throw new Error('headNext is null')
+
+      // 1. 断绝 head 和 headNext 的关系
+      delete head.next
+      delete headNext.prev
+
+      // 2. 重新赋值 head
+      this.head = headNext
+
+      // 3. 清理 data
+      delete this.data[head.key]
+
+      // 4. 更新计数
+      this.dataLength--
+    }
+  }
+
+  get(key: string): any {
+    const data = this.data
+    const curNode = data[key]
+
+    if (curNode == null) return null
+
+    // 如果该节点为最后一个节点，则不需要额外操作
+    if (this.tail === curNode) return curNode.value
+
+    // 如果节点为第一个或中间节点，则移动到最后
+    this.moveToTail(curNode)
+
+    return curNode.value
+  }
+
+  set(key: string, value: any) {
+    const data = this.data
+    const curNode = data[key]
+
+    if (curNode == null) {
+      // 新增数据
+      const newNode: IListNode = {
+        key,
+        value
+      }
+      // 移动到最后
+      this.moveToTail(newNode)
+      // 更新 data
+      data[key] = newNode
+      this.dataLength++
+      // 如果是第一个元素，则需要设置头指针
+      if (this.dataLength === 1) this.head = newNode
+    } else {
+      // 修改数据
+      curNode.value = value
+      // 移动到最后
+      this.moveToTail(curNode)
+    }
+
+    // 如果超出容量，则需要清理
+    this.tryClean()
+  }
+}
 ```
