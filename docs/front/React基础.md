@@ -44,13 +44,13 @@ t.test()
 React < 18:
 
 1. 不可变值，即不更改原来的值，而是生成一个新的值去替换
-2. 可能是异步更新
+2. 异步同步的情况
    1. 直接使用是异步的，需要在回调函数中获取最新值
    2. setTimeout 中是同步的
    3. 自定义 DOM 事件中是同步的
-3. 可能会被合并
-   1. 传入对象时会合并，即多次 `setState({ count: this.state.count + 1 })` 只会累加一次，类似 `Object.assign`
-   2. 传入函数时不会合并，即多次 `setState((preState, props) => { count: preState.count + 1 })` 会累加多次
+3. 数据合并的情况
+   1. 传入对象时异步会合并，即多次 `setState({ count: this.state.count + 1 })` 只会累加一次，类似 `Object.assign`；同步不会合并
+   2. 传入函数时异步同步都不会合并，即多次 `setState((preState, props) => { count: preState.count + 1 })` 会累加多次
 
 ```jsx
 // React < 18 的情况
@@ -58,15 +58,17 @@ componentDidMount() {
   // 假设 count 初始为 0
   this.setState({ count: this.state.count + 1 })
   console.log(this.state.count) // 0
-  this.setState({ count: this.state.count + 1 })
+  this.setState({ count: this.state.count + 2 }, () => console.log(this.state.count)) // 2 (后者会覆盖前者的赋值)
   console.log(this.state.count) // 0
   setTimeout(() => {
     this.setState({ count: this.state.count + 1 })
-    console.log(this.state.count) // 2
+    console.log(this.state.count) // 3
+    this.setState({ count: this.state.count + 1 })
+    console.log(this.state.count) // 4
   })
   setTimeout(() => {
     this.setState({ count: this.state.count + 1 })
-    console.log(this.state.count) // 3
+    console.log(this.state.count) // 5
   })
 }
 ```
@@ -75,9 +77,21 @@ React >= 18:
 
 实现了 Automatic Batching 自动批处理
 
-没有同步了，全部都是异步
+需要将 ReactDOM.render 替换为 ReactDOM.createRoot
 
-没有不合并了，全都是合并
+此时没有同步了，全部都是异步
+
+此时没有不合并了，全都是合并
+
+另外：
+
+setState 本质是同步的，但是被 React 做成了 “异步” 的样子
+
+这个 “异步” 不是宏任务和微任务，只是执行顺序进行了调整，为了方便理解才叫 “异步”
+
+即微任务 Promise.then 执行之前，state 已经计算完了
+
+因为要考虑性能，多次 state 修改，只能进行一次 DOM 渲染
 
 ## 生命周期
 
