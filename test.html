@@ -1,27 +1,31 @@
 <!--
  * @Author: KokoTa
- * @Date: 2024-01-25 14:07:57
- * @LastEditTime: 2024-02-28 20:57:37
+ * @Date: 2024-05-10 09:23:34
+ * @LastEditTime: 2024-05-13 10:14:17
  * @LastEditors: KokoTa
- * @Description: 
- * @FilePath: \blog\test.html
+ * @Description:
 -->
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-</head>
-<body>
-  <img id="img" src="" alt="">
-  <script>
-    window.addEventListener('error', (event) => { 
-      console.log(event, 123)
-    }, true);
 
-    window.onerror = (e) => console.log(e, 1)
+  <style>
+  </style>
+</head>
+
+<body>
+  <script type="module">
+    async function fn() {
+      const { add } = await import('./test.js')
+      console.log(add(1, 2))
+    }
+
+
   </script>
-  <script src="./test.js"></script>
 </body>
+
 </html>

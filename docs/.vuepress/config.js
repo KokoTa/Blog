@@ -1,20 +1,22 @@
 /*
  * @Author: KokoTa
  * @Date: 2023-10-09 17:54:55
- * @LastEditTime: 2024-03-28 15:10:30
+ * @LastEditTime: 2024-05-16 11:18:15
  * @LastEditors: KokoTa
  * @Description:
  */
-module.exports = {
-  base: '/blog/',
-  title: "KokoTa's Blog",
-  description: 'Just playing around',
-  themeConfig: {
-    lastUpdated: 'Last Updated',
+
+import { viteBundler } from '@vuepress/bundler-vite'
+import { defaultTheme } from '@vuepress/theme-default'
+import { defineUserConfig } from 'vuepress'
+
+export default defineUserConfig({
+  bundler: viteBundler(),
+  theme: defaultTheme({
     sidebar: [
       {
-        title: '前端知识点汇总',
-        path: '/front/',
+        text: '前端知识点汇总',
+        link: '/front/',
         children: [
           '/front/HTML',
           '/front/CSS',
@@ -51,21 +53,21 @@ module.exports = {
           '/front/项目设计',
           '/front/算法相关',
           '/front/前端问题汇总',
-          '/front/掘金文章',
+          '/front/掘金文章'
         ]
       },
       {
-        title: '前端其他知识点汇总',
-        path: '/question/',
+        text: '前端其他知识点汇总',
+        link: '/question/',
         children: [
           {
-            title: 'html',
-            collapsable: true,
+            text: 'html',
+            collapsible: true,
             children: ['/question/html/tag', '/question/html/browser']
           },
           {
-            title: 'css',
-            collapsable: true,
+            text: 'css',
+            collapsible: true,
             children: [
               '/question/css/attribute',
               '/question/css/unit',
@@ -74,8 +76,8 @@ module.exports = {
             ]
           },
           {
-            title: 'javascript',
-            collapsable: true,
+            text: 'javascript',
+            collapsible: true,
             children: [
               '/question/js/api',
               '/question/js/es6',
@@ -85,8 +87,8 @@ module.exports = {
             ]
           },
           {
-            title: 'net',
-            collapsable: true,
+            text: 'net',
+            collapsible: true,
             children: [
               '/question/net/http',
               '/question/net/tcp',
@@ -101,5 +103,9 @@ module.exports = {
         ]
       }
     ]
-  }
-}
+  }),
+  base: '/blog/',
+  lang: 'zh-CN',
+  title: "KokoTa's Blog",
+  description: 'Just playing around'
+})

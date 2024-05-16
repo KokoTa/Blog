@@ -1,0 +1,107 @@
+<!--
+ * @Author: KokoTa
+ * @Date: 2024-05-09 14:46:20
+ * @LastEditTime: 2024-05-09 15:42:23
+ * @LastEditors: KokoTa
+ * @Description:
+-->
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>艾宾浩斯遗忘曲线计划表</title>
+  <script src="https://cdn.staticfile.org/dayjs/1.11.11/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.1/dist/vue.min.js"
+    integrity="sha256-Gr5K6WNX8YmlM8X13OTW+mp3n/py07fT3+JcKWFsiJY=" crossorigin="anonymous"></script>
+  <style>
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: 0;
+      cursor: pointer;
+    }
+
+    td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <input placeholder="输入要学习的项目数，比如100个章节就输入100" type="text" v-model="num">
+    <input placeholder="输入开始日期，比如2024-05-01" type="text" v-model="start">
+    <button @click="onSubmit">确定</button>
+    <table>
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>学习项目</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(date, index) in Object.keys(dateMap)" :key="index">
+          <td>{{ date }}</td>
+          <td>
+            <span style="padding: 0 10px;" v-for="item in dateMap[date]" :key="item">{{ item }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    function ebbinghausTable(n, s) {
+      const list = Array(n).fill().map((n, i) => i + 1) // 学习项目
+      const ebbinghausOffset = [0, 1, 2, 4, 7, 15, 31] // 遗忘曲线间隔
+
+      const itemMap = {} // 每个项目的学习时间
+      const now = dayjs(s)
+      list.forEach((item, index) => {
+        itemMap[item] = ebbinghausOffset.map(i => now.add(i + index, 'day').format('YYYY-MM-DD'))
+      })
+
+      let dateMap = {} // 每个学习时间所需要学习的项
+      Object.entries(itemMap).forEach(([key, value]) => {
+        value.forEach(item => {
+          if (!dateMap[item]) {
+            dateMap[item] = []
+          }
+          dateMap[item].push(key)
+        })
+      })
+
+      // 给时间做个排序
+      dateMap = Object.keys(dateMap).sort((a, b) => dayjs(a).diff(dayjs(b))).reduce((acc, cur) => {
+        acc[cur] = dateMap[cur]
+        return acc
+      }, {})
+
+      return dateMap
+    }
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        num: undefined,
+        start: undefined,
+        dateMap: {}
+      },
+      methods: {
+        onSubmit() {
+          if (!this.num || !this.start) alert('数据不能为空')
+          this.dateMap = ebbinghausTable(+this.num.trim(), this.start.trim())
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
