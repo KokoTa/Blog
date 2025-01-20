@@ -6,7 +6,7 @@ Model（模型）表示应用程序核心（比如数据库记录列表）
 View（视图）显示数据（数据库记录）
 Controller（控制器）处理输入（写入数据库记录）
 
-![mvc](/images/mvc.png)
+![mvc](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/mvc.png)
 
 ## MVVM 模式
 
@@ -14,17 +14,17 @@ Controller（控制器）处理输入（写入数据库记录）
 
 MVVM 模式是 MVC 模式的改进版，它切断了 Model 改变 View 这条线，将 Control 换成了 ViewModel，简而言之就是前端中我们使用的 Vue 框架的双向数据绑定，视图(view)改变会改变前端数据(view model)，同时也会改变后端数据(model)，反之亦然，精简了大量冗余代码，提高了开发效率
 
-![mvvm](/images/mvvm.png)
+![mvvm](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/mvvm.png)
 
 ## Vue 双向数据绑定
 
 View 和 ViewModel 的通信是双向数据通信，在前端框架中，就是双向数据绑定
 
-![vue双向数据绑定](/images/vue双向数据绑定.png)
+![vue双向数据绑定](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/vue双向数据绑定.png)
 
 上图简要说明了双向数据绑定的方法
 
-![双向绑定设计模式](/images/双向绑定设计模式.png)
+![双向绑定设计模式](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/双向绑定设计模式.png)
 
 上图简要说明了双向数据绑定的设计模式(发布/订阅模式)：
 

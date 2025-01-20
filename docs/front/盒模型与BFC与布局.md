@@ -14,8 +14,8 @@
 2. 盒模型分为两种：标准盒模型和IE盒模型。
 3. 标准盒模型的模型高度 = content的高度
  IE盒模型的模型高度 = content + padding + border 的高度(宽度同理)
- ![Standard-box](/images/standard-box.jpg)
- ![IE-box](/images/ie-box.jpg)
+ ![Standard-box](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/standard-box.jpg)
+ ![IE-box](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/ie-box.jpg)
 4. CSS3的`box-sizing`提供了两种盒模型的转换：
  `box-sizing: border-box`：标准转IE
  `box-sizing: content-box`：IE转标准
@@ -28,11 +28,11 @@
 ### 盒模型问题
 
 盒模型垂直方向会发生外边距重叠。
-![边距重叠](/images/边距重叠.png)
+![边距重叠](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/边距重叠.png)
 
 上图显示了我们给红块添加了一个上外边距`margin-top: 100px`，那么此时body的位置是否发生了变化？
 
-![边距重叠](/images/边距重叠2.png)
+![边距重叠](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/边距重叠2.png)
 
 答案是body也会有一个上外边距`margin-top: 100px`的效果。
 那么为什么会发生重叠呢？
@@ -65,7 +65,7 @@ BFC会创建一个独立的盒子，盒子和盒子里的东西与外部是隔�
 3. 父元素左边的border，与子元素左边的margin相接触(对于从左往右的格式化)。即使存在浮动也是如此。
 4. BFC的区域不会与Float Box重叠。
 
-   ![BFC与Float](/images/BFC与Float.png)
+   ![BFC与Float](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/BFC与Float.png)
 
    如上图所示，两个同级元素，左边是浮动块，右边是BFC块，两者不会发生重叠。
 
@@ -73,15 +73,15 @@ BFC会创建一个独立的盒子，盒子和盒子里的东西与外部是隔�
 
    解释：如图一开始我们设置了一个黑色背景的父元素和一个红色背景的子元素
 
-   ![BFC高度1](/images/BFC高度1.png)
+   ![BFC高度1](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/BFC高度1.png)
 
    接下来我们使红色元素左浮动，我们发现父元素的高度变为了0
 
-   ![BFC高度2](/images/BFC高度2.png)
+   ![BFC高度2](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/BFC高度2.png)
 
    此时如果我们给父元素添加BFC，浮动元素也参与父元素的高度计算
 
-   ![BFC高度1](/images/BFC高度1.png)
+   ![BFC高度1](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/BFC高度1.png)
 
    Look!终于正常了！
 

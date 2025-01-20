@@ -30,7 +30,7 @@ HTTPS = HTTP + 加密 + 认证 + 完整性保护 = HTTP + SSL/TLS
 通过加密，安全问题就解决了吗？NONONO！这里还存在一个严重问题：你怎么知道我发给你的公钥是我的公钥呢？会不会是被别人截取后替换的公钥呢？  
 这个问题交给证书吧，它可以保证公钥的合法性。（然而还是不能完全保证，比如签发机构自身出事了）  
 证书类似公钥的身份证，由可信任的第三方公司（认证公司）颁发，使用证书的流程如图：
-![数字证书](/images/数字证书.jpg)
+![数字证书](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/数字证书.jpg)
 
 ### 完整性保护
 
@@ -38,7 +38,7 @@ HTTPS情况下，应用层发送数据时会附加一种叫做MAC(Message Authen
 
 ## HTTPS通信流程
 
-![HTPPS流程](/images/HTTPS流程.jpg)
+![HTPPS流程](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/HTTPS流程.jpg)
 
 这里我们可能会有一个问题，把证书克隆一份，其他人是不是也能拥有沟通权限了？
 答案是否定的，原因见 [这里](https://www.zhihu.com/question/29251991/answer/580813797)

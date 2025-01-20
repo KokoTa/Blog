@@ -80,7 +80,7 @@
 
 ## 请求头判断
 
-![请求头判断](/images/请求头判断.png)
+![请求头判断](https://qcloudtest-1256171877.cos.ap-guangzhou.myqcloud.com/blog/images/请求头判断.png)
 
 ## 持久连接
 
